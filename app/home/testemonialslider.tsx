@@ -23,13 +23,9 @@ const animation = {
 };
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
-const TestimonialCard = ({
-  testimonial,
-}: {
-  testimonial: Testimonial;
-}) => {
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -92,9 +88,7 @@ const TestimonialCard = ({
   );
 };
 
-const TestimonialSlider: React.FC<TestimonialProps> = ({
-  data,
-}) => {
+const TestimonialSlider: React.FC<TestimonialProps> = ({ data }) => {
   const [sliderRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     renderMode: "performance",
@@ -110,19 +104,11 @@ const TestimonialSlider: React.FC<TestimonialProps> = ({
     },
 
     updated(s) {
-      s.moveToIdx(
-        s.track.details.abs + 5,
-        true,
-        animation
-      );
+      s.moveToIdx(s.track.details.abs + 5, true, animation);
     },
 
     animationEnded(s) {
-      s.moveToIdx(
-        s.track.details.abs + 5,
-        true,
-        animation
-      );
+      s.moveToIdx(s.track.details.abs + 5, true, animation);
     },
 
     breakpoints: {
@@ -153,19 +139,13 @@ const TestimonialSlider: React.FC<TestimonialProps> = ({
     <div className="relative w-full">
       {/* Slider wrapper */}
       <div className="relative overflow-hidden rounded-2xl">
-        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-16 bg-gradient-to-r from-black/25 via-black/10 to-transparent sm:w-24 lg:w-32"/>
-        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-16 bg-gradient-to-l from-black/25 via-black/10 to-transparent sm:w-24 lg:w-32"/>
+        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-16 bg-gradient-to-r from-black/25 via-black/10 to-transparent sm:w-24 lg:w-32" />
+        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-16 bg-gradient-to-l from-black/25 via-black/10 to-transparent sm:w-24 lg:w-32" />
 
         {/* Slider */}
-        <div
-          ref={sliderRef}
-          className="keen-slider"
-        >
+        <div ref={sliderRef} className="keen-slider">
           {data.map((testimonial) => (
-            <TestimonialCard
-              key={testimonial.id}
-              testimonial={testimonial}
-            />
+            <TestimonialCard key={testimonial.id} testimonial={testimonial} />
           ))}
         </div>
       </div>

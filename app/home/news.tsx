@@ -27,7 +27,7 @@ const HomeNews = () => {
   useEffect(() => {
     const fetchNews = async () => {
       const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const headers = getAuthHeaders();
 
       try {
@@ -65,7 +65,9 @@ const HomeNews = () => {
 
   return (
     <section className="flex flex-col">
-      <h1 className="font-bold text-3xl pb-2 pt-4 uppercase">News and Updates</h1>
+      <h1 className="font-bold text-3xl pb-2 pt-4 uppercase">
+        News and Updates
+      </h1>
       <div className="flex justify-between flex-wrap gap-4">
         <p className="text-md text-default-500 max-w-lg">
           Get to know the latest news and updates about ALVEO Land.

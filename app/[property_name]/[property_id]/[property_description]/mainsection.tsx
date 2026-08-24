@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Image } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 
@@ -13,7 +13,8 @@ interface MainSectionProps {
   data: Property;
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const MainSection: React.FC<MainSectionProps> = ({ data }) => {
   let images: string[] = [];

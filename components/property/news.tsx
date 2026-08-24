@@ -13,7 +13,8 @@ interface NewsBlogsDataProps {
   articles: NewsBlogsData[];
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const NewsBlogs: React.FC<NewsBlogsDataProps> = ({ articles }) => {
   const defaultImage =

@@ -27,7 +27,7 @@ const SingleNews = () => {
       if (!id) return;
 
       const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const headers = getAuthHeaders();
 
       try {

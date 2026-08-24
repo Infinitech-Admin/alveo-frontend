@@ -13,7 +13,8 @@ interface AgentDataProps {
   agentdata: AgentData[];
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const AgentCertificates: React.FC<AgentDataProps> = ({ agentdata }) => {
   return (
@@ -21,7 +22,7 @@ const AgentCertificates: React.FC<AgentDataProps> = ({ agentdata }) => {
       <PhotoProvider>
         {agentdata.map((Certificate, index) => (
           <PhotoView
-          key={index}
+            key={index}
             data-title={Certificate.title}
             src={`${apiUrl}/certificates/${Certificate.image}`}
           >
@@ -35,7 +36,6 @@ const AgentCertificates: React.FC<AgentDataProps> = ({ agentdata }) => {
           </PhotoView>
         ))}
       </PhotoProvider>
-
     </div>
   );
 };

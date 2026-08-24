@@ -19,14 +19,14 @@ interface AgentData {
   phone: string;
 }
 
-
 export default function BlogPage() {
   const [profile, setProfile] = useState<AgentData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const endpoint = `${apiUrl}/api/user`;
 
       try {
@@ -46,9 +46,6 @@ export default function BlogPage() {
         const data = await response.json();
 
         setProfile(data.record || []);
-
-
-
       } catch (error) {
         console.error("Error fetching testimonials:", error);
       } finally {
@@ -62,8 +59,6 @@ export default function BlogPage() {
   if (loading) {
     return <div>Loading Profile Data...</div>;
   }
-
-
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">

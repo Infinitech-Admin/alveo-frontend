@@ -46,13 +46,15 @@ const validationSchema = Yup.object().shape({
   message: Yup.string().required("Message is required"),
 });
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const AppointmentCard = () => {
   const [properties, setProfile] = useState<any[]>([]);
   useEffect(() => {
     const fetchTestimonials = async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const endpoint = `${apiUrl}/api/user/properties`;
       try {
         const headers = getAuthHeaders();

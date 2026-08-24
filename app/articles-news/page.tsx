@@ -22,7 +22,7 @@ const NewsandArticles = () => {
   useEffect(() => {
     const fetchNews = async () => {
       const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const headers = getAuthHeaders();
 
       try {
@@ -39,7 +39,6 @@ const NewsandArticles = () => {
         const data = await response.json();
 
         setNews(data.records || []); // Ensure `data.records` is assigned or fallback to an empty array
-   
       } catch (err) {
         console.error("Error fetching news:", err);
         setError("Error fetching news details. Please try again later.");
@@ -62,13 +61,11 @@ const NewsandArticles = () => {
 
       {news && news.length > 0 ? (
         <NewsBlogs articles={news} />
-      ) :
+      ) : (
         <div className="flex justify-center py-12 h-96">
           <Spinner size="lg" label="Loading News..." />
         </div>
-      }
-
-
+      )}
     </section>
   );
 };

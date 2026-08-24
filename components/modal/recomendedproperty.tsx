@@ -47,7 +47,8 @@ interface RecommendedCardProps {
   data: Property[];
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const RecommendedCard: React.FC<RecommendedCardProps> = ({ data }) => {
   const pathname = usePathname();

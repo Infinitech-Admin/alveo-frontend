@@ -20,7 +20,7 @@ interface SiteProgressProps {
 }
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const PropertyLocation: React.FC<{ location: string }> = ({ location }) => {
   const [expanded, setExpanded] = useState(false);

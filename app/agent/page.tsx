@@ -25,7 +25,7 @@ import { getAuthHeaders } from "../auth";
 import SubscribeForm from "@/components/subscribe";
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 // ---------- Types ----------
 interface Testimonial {
@@ -78,7 +78,11 @@ function AgentPageLayout({ children }: { children: React.ReactNode }) {
 }
 
 // ---------- Contact Info ----------
-function AgentContactInfo({ data }: { data: AgentRecord & { profile: AgentProfile } }) {
+function AgentContactInfo({
+  data,
+}: {
+  data: AgentRecord & { profile: AgentProfile };
+}) {
   const formatPhoneNumber = (phone: string) => {
     if (!phone) return "";
     return phone.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3");
@@ -222,7 +226,11 @@ function AgentContactInfo({ data }: { data: AgentRecord & { profile: AgentProfil
 }
 
 // ---------- Profile Card ----------
-function ProfileCard({ profile }: { profile: AgentRecord & { profile: AgentProfile } }) {
+function ProfileCard({
+  profile,
+}: {
+  profile: AgentRecord & { profile: AgentProfile };
+}) {
   return (
     <div>
       <Image
@@ -312,7 +320,7 @@ function AgentTestimonial({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentTestimonials = activeTestimonials.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   return (
@@ -368,7 +376,7 @@ const AgentPage = () => {
 
         if (!response.ok) {
           throw new Error(
-            `Failed to fetch testimonials: ${response.status} - ${response.statusText}`
+            `Failed to fetch testimonials: ${response.status} - ${response.statusText}`,
           );
         }
 

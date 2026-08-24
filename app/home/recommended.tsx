@@ -8,7 +8,6 @@ import { getAuthHeaders } from "../auth";
 import RecommendedCard from "@/components/modal/recomendedproperty";
 import { Spinner } from "@heroui/react";
 
-
 const RecommendedForYou = () => {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -19,7 +18,7 @@ const RecommendedForYou = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const headers = getAuthHeaders();
 
       try {
@@ -47,10 +46,11 @@ const RecommendedForYou = () => {
     fetchProperties();
   }, []);
 
-
   return (
     <section className="flex flex-col">
-      <h1 className="font-bold text-3xl pb-2 pt-12 uppercase">Recommended For You</h1>
+      <h1 className="font-bold text-3xl pb-2 pt-12 uppercase">
+        Recommended For You
+      </h1>
       <div className="flex justify-between flex-wrap gap-4">
         <p className="text-md text-default-500 max-w-lg">
           ALVEO Land believes in building world-class communities fit for your
@@ -73,14 +73,13 @@ const RecommendedForYou = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-4 py-6">
           <RecommendedCard data={properties} />
         </div>
-      ) :
+      ) : (
         <div className="flex justify-center py-12 h-96">
           <Spinner size="lg" label="Loading Propperties...." />
         </div>
-      }
+      )}
     </section>
   );
 };
 
 export default RecommendedForYou;
-

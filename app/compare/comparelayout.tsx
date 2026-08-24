@@ -63,7 +63,7 @@ interface CompareLayoutProps {
 // a different domain from the rest of the app, so images 404'd/never loaded.
 // Now it matches the same env-driven API base URL used everywhere else.
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const CompareLayout: React.FC<CompareLayoutProps> = ({ initialData }) => {
   const [properties, setProperties] = useState<any[]>(initialData);

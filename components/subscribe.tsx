@@ -20,7 +20,7 @@ const SubscribeForm = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site"}/api/user/subscribe`,
+        `${process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site"}/api/user/subscribe`,
         { email },
         {
           headers: {
@@ -30,7 +30,7 @@ const SubscribeForm = () => {
       );
 
       const emailAgentResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site"}/api/email/subscribe/agent`,
+        `${process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site"}/api/email/subscribe/agent`,
         {
           sender_email: email,
         },

@@ -1,7 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, CardFooter, Chip, Tooltip } from "@heroui/react";
-import { LuCircleCheck, LuHousePlus, LuBuilding2, LuHardHat, LuBadgeCheck, LuBuilding, LuBed, LuBedDouble } from "react-icons/lu";
+import {
+  LuCircleCheck,
+  LuHousePlus,
+  LuBuilding2,
+  LuHardHat,
+  LuBadgeCheck,
+  LuBuilding,
+  LuBed,
+  LuBedDouble,
+} from "react-icons/lu";
 import { MdInfo } from "react-icons/md";
 import Link from "next/link";
 import NoDataFound from "../fallback/nodatafound";
@@ -18,7 +27,7 @@ interface Property {
   min_price: number;
   max_price: number;
   images: string;
-  description: string
+  description: string;
 }
 
 interface Listings {
@@ -35,7 +44,7 @@ interface Listings {
     name: string;
     location: string;
     description: string;
-  }
+  };
 }
 
 interface RecommendedCardProps {
@@ -43,12 +52,13 @@ interface RecommendedCardProps {
   type: "property" | "listing";
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const RecommendedCard: React.FC<RecommendedCardProps> = ({ data, type }) => {
   const pathname = usePathname();
   const [compareList, setCompareList] = useState<string[]>(
-    JSON.parse(localStorage.getItem("compareList") || "[]")
+    JSON.parse(localStorage.getItem("compareList") || "[]"),
   );
 
   useEffect(() => {
@@ -81,21 +91,32 @@ const RecommendedCard: React.FC<RecommendedCardProps> = ({ data, type }) => {
 
   return (
     <>
-
       {data?.length > 0 ? (
         data.map((item) => {
           const isProperty = type === "property";
-          const name = isProperty ? (item as Property).property_name : (item as Listings).property.name;
+          const name = isProperty
+            ? (item as Property).property_name
+            : (item as Listings).property.name;
           const unit_type = isProperty ? (item as Property).max_price : null;
-          const description = isProperty ? (item as Property).description : (item as Listings).property.description;
-          const location = isProperty ? (item as Property).property_location : (item as Listings).property.location;
-          const status = isProperty ? (item as Property).status : (item as Listings).unit_type;
-          const price = isProperty ? (item as Property).min_price : (item as Listings).unit_price;
+          const description = isProperty
+            ? (item as Property).description
+            : (item as Listings).property.description;
+          const location = isProperty
+            ? (item as Property).property_location
+            : (item as Listings).property.location;
+          const status = isProperty
+            ? (item as Property).status
+            : (item as Listings).unit_type;
+          const price = isProperty
+            ? (item as Property).min_price
+            : (item as Listings).unit_price;
 
           let imageUrl = "";
           try {
             const images: string[] = JSON.parse(
-              isProperty ? (item as Property).images : (item as Listings).images
+              isProperty
+                ? (item as Property).images
+                : (item as Listings).images,
             );
             if (Array.isArray(images) && images.length > 0) {
               imageUrl = isProperty
@@ -109,8 +130,12 @@ const RecommendedCard: React.FC<RecommendedCardProps> = ({ data, type }) => {
           const defaultImage =
             "https://www.dmcihomes.com/uploads/media/executives-1563253639282.jpg";
 
-          const propertyId = isProperty ? (item as Property).id : (item as Listings).id;
-          const linkHref = isProperty ? `${toSlug(name)}/${toSlug(item.id)}/${toSlug(description || "")}` : `${toSlug(name)}/${toSlug(item.id)}/${toSlug(description || "")}`;
+          const propertyId = isProperty
+            ? (item as Property).id
+            : (item as Listings).id;
+          const linkHref = isProperty
+            ? `${toSlug(name)}/${toSlug(item.id)}/${toSlug(description || "")}`
+            : `${toSlug(name)}/${toSlug(item.id)}/${toSlug(description || "")}`;
 
           return (
             <Card key={propertyId}>
@@ -127,29 +152,29 @@ const RecommendedCard: React.FC<RecommendedCardProps> = ({ data, type }) => {
                   <div className="flex-col items-start px-1">
                     <div className="flex items-center gap-2 mt-2">
                       <div
-                        className={`text-tiny uppercase font-semibold px-2 py-1 rounded-md inline-flex items-center gap-1 ${status === "RFO"
-                          ? "bg-green-100 text-[#0F1B2E]"
-                          : status === "Under Construction"
-                            ? "bg-red-100 text-red-800"
-                            : status === "New"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-gray-100 text-gray-600"
-                          }`}
+                        className={`text-tiny uppercase font-semibold px-2 py-1 rounded-md inline-flex items-center gap-1 ${
+                          status === "RFO"
+                            ? "bg-green-100 text-[#0F1B2E]"
+                            : status === "Under Construction"
+                              ? "bg-red-100 text-red-800"
+                              : status === "New"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-600"
+                        }`}
                       >
                         <LuBuilding2 />
-                        <p className="text-[9px] md:text-tiny">
-                          {status}
-                        </p>
+                        <p className="text-[9px] md:text-tiny">{status}</p>
                       </div>
                       <div
-                        className={`text-tiny uppercase font-semibold px-2 py-1 rounded-md inline-flex items-center gap-1 ${status === "RFO"
-                          ? "bg-green-100 text-[#0F1B2E]"
-                          : status === "Under Construction"
-                            ? "bg-red-100 text-red-800"
-                            : status === "New"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-gray-100 text-gray-600"
-                          }`}
+                        className={`text-tiny uppercase font-semibold px-2 py-1 rounded-md inline-flex items-center gap-1 ${
+                          status === "RFO"
+                            ? "bg-green-100 text-[#0F1B2E]"
+                            : status === "Under Construction"
+                              ? "bg-red-100 text-red-800"
+                              : status === "New"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-600"
+                        }`}
                       >
                         <LuBedDouble />
                         <p className="text-[9px] md:text-tiny">
@@ -188,8 +213,6 @@ const RecommendedCard: React.FC<RecommendedCardProps> = ({ data, type }) => {
                       </div>
                     </Tooltip>
                   ) : null}
-
-
                 </div>
               </CardFooter>
             </Card>

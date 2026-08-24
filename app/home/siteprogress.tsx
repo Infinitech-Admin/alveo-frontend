@@ -29,7 +29,8 @@ const SiteProgress = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";      const headers = getAuthHeaders();
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
+      const headers = getAuthHeaders();
 
       try {
         const response = await fetch(`${apiUrl}/api/user/properties`, {
@@ -43,9 +44,11 @@ const SiteProgress = () => {
         }
 
         const data = await response.json();
-        const properties: Property[] = data.records.filter((record: Property) => {
-          return record.percent < 100;
-        });
+        const properties: Property[] = data.records.filter(
+          (record: Property) => {
+            return record.percent < 100;
+          },
+        );
 
         if (properties.length === 0) {
           setError("No properties available.");
@@ -63,14 +66,13 @@ const SiteProgress = () => {
     fetchProperties();
   }, []);
 
-
   return (
     <section className="flex flex-col">
       <h1 className="font-bold text-3xl pb-2 pt-4 uppercase">Site Progress</h1>
       <div className="flex justify-between flex-wrap gap-4">
         <p className="text-md text-default-500 max-w-lg">
-          ALVEO Land is dedicated to delivering quality developments on time
-          or even ahead of what we promised.
+          ALVEO Land is dedicated to delivering quality developments on time or
+          even ahead of what we promised.
         </p>
       </div>
 

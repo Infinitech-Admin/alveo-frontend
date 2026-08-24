@@ -2,13 +2,7 @@
 
 import React, { useState } from "react";
 import useSWR from "swr";
-import {
-  Tab,
-  Tabs,
-  Button,
-  useDisclosure,
-  Spinner,
-} from "@heroui/react";
+import { Tab, Tabs, Button, useDisclosure, Spinner } from "@heroui/react";
 import { LuPenLine } from "react-icons/lu";
 
 import { getAuthHeaders } from "../auth";
@@ -58,7 +52,7 @@ const fetcher = async (url: string): Promise<UserResponse> => {
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch testimonials: ${response.status} ${response.statusText}`
+      `Failed to fetch testimonials: ${response.status} ${response.statusText}`,
     );
   }
 
@@ -71,12 +65,11 @@ const Testimonials = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const apiUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://infinitech-api6.site";
+    process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
   const { data, error, isLoading, mutate } = useSWR<UserResponse>(
     `${apiUrl}/api/user`,
-    fetcher
+    fetcher,
   );
 
   /*
@@ -87,9 +80,7 @@ const Testimonials = () => {
       <section className="flex min-h-[400px] w-full items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <Spinner size="lg" color="success" />
-          <p className="text-sm text-default-500">
-            Loading testimonials...
-          </p>
+          <p className="text-sm text-default-500">Loading testimonials...</p>
         </div>
       </section>
     );
@@ -106,9 +97,7 @@ const Testimonials = () => {
             Unable to load testimonials
           </h3>
 
-          <p className="mt-2 text-sm text-red-500">
-            Please try again later.
-          </p>
+          <p className="mt-2 text-sm text-red-500">Please try again later.</p>
         </div>
       </section>
     );
@@ -118,7 +107,7 @@ const Testimonials = () => {
 
   const clientTestimonials =
     data?.record?.testimonials?.filter(
-      (testimonial) => testimonial.status === "active"
+      (testimonial) => testimonial.status === "active",
     ) ?? [];
 
   const contracts = data?.record?.contracts ?? [];
@@ -143,37 +132,22 @@ const Testimonials = () => {
           <Tabs
             aria-label="Testimonials"
             selectedKey={activeTab}
-            onSelectionChange={(key) =>
-              setActiveTab(String(key))
-            }
+            onSelectionChange={(key) => setActiveTab(String(key))}
             color="primary"
             variant="underlined"
             className="w-full sm:w-auto"
             classNames={{
-              tabList:
-                "w-full sm:w-auto gap-4 overflow-x-auto",
-              tab:
-                "px-2 py-2 text-xs sm:text-sm md:text-base",
-              cursor:
-                "bg-[#192D4D]",
-              tabContent:
-                "group-data-[selected=true]:text-[#192D4D]",
+              tabList: "w-full sm:w-auto gap-4 overflow-x-auto",
+              tab: "px-2 py-2 text-xs sm:text-sm md:text-base",
+              cursor: "bg-[#192D4D]",
+              tabContent: "group-data-[selected=true]:text-[#192D4D]",
             }}
           >
-            <Tab
-              key="gallery"
-              title="Videos"
-            />
+            <Tab key="gallery" title="Videos" />
 
-            <Tab
-              key="testimonials"
-              title="Testimonials"
-            />
+            <Tab key="testimonials" title="Testimonials" />
 
-            <Tab
-              key="contract"
-              title="Contract Signing"
-            />
+            <Tab key="contract" title="Contract Signing" />
           </Tabs>
 
           {/* Write Testimonial */}
@@ -204,9 +178,7 @@ const Testimonials = () => {
         {activeTab === "testimonials" && (
           <div className="w-full">
             {clientTestimonials.length > 0 ? (
-              <TestimonialClients
-                data={clientTestimonials}
-              />
+              <TestimonialClients data={clientTestimonials} />
             ) : (
               <EmptyState message="No testimonials available yet." />
             )}
@@ -241,16 +213,10 @@ const Testimonials = () => {
 /*
  * Empty State
  */
-const EmptyState = ({
-  message,
-}: {
-  message: string;
-}) => {
+const EmptyState = ({ message }: { message: string }) => {
   return (
     <div className="flex min-h-[280px] w-full items-center justify-center rounded-2xl border border-[#2B2118]/10 bg-gray-50 px-6 text-center">
-      <p className="text-sm text-default-500 sm:text-base">
-        {message}
-      </p>
+      <p className="text-sm text-default-500 sm:text-base">{message}</p>
     </div>
   );
 };

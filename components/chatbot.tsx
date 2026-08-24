@@ -16,7 +16,7 @@ const Chatbot = () => {
   ];
   const [properties, setProperties] = useState<any[]>([]);
   const apiUrl =
-    process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+    process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
   const endpoint = `${apiUrl}/api/user/properties`;
 
   const pathname = usePathname();

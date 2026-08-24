@@ -2,11 +2,7 @@
 
 import React from "react";
 import useSWR from "swr";
-import {
-  Accordion,
-  AccordionItem,
-  Spinner,
-} from "@heroui/react";
+import { Accordion, AccordionItem, Spinner } from "@heroui/react";
 import { getAuthHeaders } from "../auth";
 
 interface FAQ {
@@ -35,18 +31,14 @@ const fetcher = async (url: string): Promise<FAQResponse> => {
 
 const FrequentlyAskQuestions = () => {
   const apiUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://infinitech-api6.site";
+    process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
   const { data, error, isLoading } = useSWR<FAQResponse>(
     `${apiUrl}/api/user/questions`,
-    fetcher
+    fetcher,
   );
 
-  const faqData =
-    data?.records?.filter(
-      (faq) => faq.status === "active"
-    ) ?? [];
+  const faqData = data?.records?.filter((faq) => faq.status === "active") ?? [];
 
   return (
     <section className="w-full py-8">
@@ -57,8 +49,8 @@ const FrequentlyAskQuestions = () => {
         </h1>
 
         <p className="mt-2 max-w-2xl text-sm leading-6 text-default-500 text-center">
-          Find answers to the most common questions about our
-          services, processes, and policies.
+          Find answers to the most common questions about our services,
+          processes, and policies.
         </p>
       </div>
 
@@ -66,14 +58,9 @@ const FrequentlyAskQuestions = () => {
       {isLoading && (
         <div className="flex min-h-[300px] items-center justify-center">
           <div className="flex flex-col items-center gap-3">
-            <Spinner
-              size="lg"
-              color="success"
-            />
+            <Spinner size="lg" color="success" />
 
-            <p className="text-sm text-default-500">
-              Loading FAQs...
-            </p>
+            <p className="text-sm text-default-500">Loading FAQs...</p>
           </div>
         </div>
       )}
@@ -82,27 +69,21 @@ const FrequentlyAskQuestions = () => {
       {error && !isLoading && (
         <div className="flex min-h-[250px] items-center justify-center">
           <div className="rounded-xl border border-red-200 bg-red-50 px-6 py-5 text-center">
-            <p className="font-medium text-red-600">
-              Failed to load FAQs.
-            </p>
+            <p className="font-medium text-red-600">Failed to load FAQs.</p>
 
-            <p className="mt-1 text-sm text-red-500">
-              Please try again later.
-            </p>
+            <p className="mt-1 text-sm text-red-500">Please try again later.</p>
           </div>
         </div>
       )}
 
       {/* Empty */}
-      {!isLoading &&
-        !error &&
-        faqData.length === 0 && (
-          <div className="flex min-h-[250px] items-center justify-center rounded-xl border border-[#2B2118]/10 bg-gray-50 px-6 text-center">
-            <p className="text-sm text-default-500">
-              No frequently asked questions available.
-            </p>
-          </div>
-        )}
+      {!isLoading && !error && faqData.length === 0 && (
+        <div className="flex min-h-[250px] items-center justify-center rounded-xl border border-[#2B2118]/10 bg-gray-50 px-6 text-center">
+          <p className="text-sm text-default-500">
+            No frequently asked questions available.
+          </p>
+        </div>
+      )}
 
       {/* FAQ */}
       {!isLoading && !error && faqData.length > 0 && (
@@ -115,10 +96,8 @@ const FrequentlyAskQuestions = () => {
                 base: "border-b border-[#192D4D]/10 last:border-b-0 sm:px-4",
                 title:
                   "text-sm font-semibold text-[#192D4D] pr-3 sm:text-base lg:text-lg",
-                trigger:
-                  "min-h-16 rounded-xl px-3 py-4 sm:px-4 sm:py-5",
-                indicator:
-                  "text-[#192D4D]",
+                trigger: "min-h-16 rounded-xl px-3 py-4 sm:px-4 sm:py-5",
+                indicator: "text-[#192D4D]",
                 content:
                   "px-3 pb-5 text-sm leading-6 text-[#192D4D]/60 sm:px-4 sm:pb-6 sm:text-base sm:leading-7",
               }}
@@ -139,9 +118,7 @@ const FrequentlyAskQuestions = () => {
                     </div>
                   }
                 >
-                  <p className="max-w-2xl">
-                    {faq.answer}
-                  </p>
+                  <p className="max-w-2xl">{faq.answer}</p>
                 </AccordionItem>
               ))}
             </Accordion>

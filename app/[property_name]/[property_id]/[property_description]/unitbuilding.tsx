@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import EmptyData from "@/components/fallback/emptydata";
 import { Image } from "@heroui/react";
 import React from "react";
@@ -18,7 +18,8 @@ interface BuildingSectionProps {
   data: Property;
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const BuildingSection: React.FC<BuildingSectionProps> = ({ data }) => {
   return (
@@ -46,9 +47,10 @@ const BuildingSection: React.FC<BuildingSectionProps> = ({ data }) => {
               <div className="absolute inset-0 bg-black bg-opacity-60 rounded-2xl z-10 hover:bg-opacity-20" />
 
               <div className="absolute bottom-5 left-6 z-20">
-
                 <div className="py-2">
-                  <h1 className="text-white text-xl font-bold uppercase">{build.name}</h1>
+                  <h1 className="text-white text-xl font-bold uppercase">
+                    {build.name}
+                  </h1>
                   <p className="text-tiny leading-3 text-[#79a0dd]">
                     Mid Rise Condominiums
                   </p>
@@ -77,9 +79,7 @@ const BuildingSection: React.FC<BuildingSectionProps> = ({ data }) => {
           <div className="col-span-full">
             <EmptyData fallbackname={"Building"} />
           </div>
-
         )}
-
       </div>
     </section>
   );

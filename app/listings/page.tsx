@@ -22,9 +22,9 @@ interface Listings {
   images: string;
   property: {
     name: string;
-    location:string;
+    location: string;
     description: string;
-  }
+  };
 }
 
 const priceRanges = [
@@ -36,7 +36,8 @@ const priceRanges = [
 ];
 
 async function fetchProperties(): Promise<Listings[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+  const apiUrl =
+    process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
   const endpoint = `${apiUrl}/api/user/listings`;
 
   try {
@@ -49,7 +50,7 @@ async function fetchProperties(): Promise<Listings[]> {
 
     if (!res.ok) {
       console.error(
-        `Failed to fetch properties: ${res.status} - ${res.statusText}`
+        `Failed to fetch properties: ${res.status} - ${res.statusText}`,
       );
       return [];
     }
@@ -69,7 +70,6 @@ export default function ListingsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPriceRange, setSelectedPriceRange] = useState("");
 
-
   useEffect(() => {
     async function loadProperties() {
       const data = await fetchProperties();
@@ -82,19 +82,25 @@ export default function ListingsPage() {
   }, []);
 
   useEffect(() => {
-    let filtered = properties.filter((property) =>
-      property.property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.property.location.toLowerCase().includes(searchTerm.toLowerCase())
+    let filtered = properties.filter(
+      (property) =>
+        property.property.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        property.property.location
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()),
     );
 
     if (selectedPriceRange && selectedPriceRange !== "All") {
       // If a specific price range is selected, split the range and apply the filter
       const [minPrice, maxPrice] = selectedPriceRange.split("-").map(Number);
       filtered = filtered.filter(
-        (property) => property.unit_price >= minPrice && property.unit_price <= maxPrice
+        (property) =>
+          property.unit_price >= minPrice && property.unit_price <= maxPrice,
       );
     }
-  
+
     // If "All" is selected, show all properties without filtering
     if (selectedPriceRange === "All") {
       filtered = properties; // Reset to all properties
@@ -125,19 +131,14 @@ export default function ListingsPage() {
               value={selectedPriceRange}
               onChange={(e) => setSelectedPriceRange(e.target.value)}
               className="w-full max-w-32 rounded-md py-2"
-              defaultSelectedKeys={['All']}
+              defaultSelectedKeys={["All"]}
             >
               {priceRanges.map((range) => (
-                <SelectItem
-                  key={range.value}
-                  value={range.value}
-                >
+                <SelectItem key={range.value} value={range.value}>
                   {range.key}
                 </SelectItem>
               ))}
             </Select>
-
-
           </div>
           <div className="grid grid-cols-2 gap-1 md:grid-cols-4 md:gap-2">
             <RecommendedCard data={filteredProperties} type="listing" />

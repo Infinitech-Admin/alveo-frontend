@@ -41,7 +41,7 @@ const SubmitForm = () => {
       const formData = new FormData();
 
       const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+        process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
       const endpoint = `${apiUrl}/api/user/submit-property`;
 
       Object.entries(values).forEach(([key, value]: [string, unknown]) => {
@@ -110,15 +110,13 @@ const SubmitForm = () => {
                     <Field name="phone">
                       {({ field }: any) => (
                         <Input
-                        {...field}
-                        label="Phone Number"
-                        labelPlacement="inside"
-                        placeholder="e.g., 09924401067"
-                        type="text"
-                        maxLength={11} 
-                    
-                      />
-                      
+                          {...field}
+                          label="Phone Number"
+                          labelPlacement="inside"
+                          placeholder="e.g., 09924401067"
+                          type="text"
+                          maxLength={11}
+                        />
                       )}
                     </Field>
                     <ErrorMessage

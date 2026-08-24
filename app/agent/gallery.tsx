@@ -12,7 +12,8 @@ interface AgentDataProps {
   agentdata: AgentData[];
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
 const AgentGallery: React.FC<AgentDataProps> = ({ agentdata }) => {
   return (
@@ -32,11 +33,9 @@ const AgentGallery: React.FC<AgentDataProps> = ({ agentdata }) => {
               width={500} // Add a width to maintain aspect ratio
               src={`${apiUrl}/images/${data.image}`}
             />
-
           </PhotoView>
         ))}
       </PhotoProvider>
-
     </div>
   );
 };

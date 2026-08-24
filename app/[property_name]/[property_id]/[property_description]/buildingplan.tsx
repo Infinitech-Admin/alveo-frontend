@@ -14,7 +14,8 @@ import {
 } from "react-icons/lu";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api6.site";
+const apiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 interface Property {
   area?: number;
   property_plan_cut?: string;
@@ -60,7 +61,8 @@ const BuildingPlanSection: React.FC<MasterPlanSectionProps> = ({
         <div className="w-full">
           <h1 className="font-bold text-2xl uppercase">Building Plan</h1>
           <p className="text-sm text-default-500 max-w-2xl">
-          Explore the structural blueprint of our development, featuring the architectural layout, total property area, and thematic design. 
+            Explore the structural blueprint of our development, featuring the
+            architectural layout, total property area, and thematic design.
           </p>
 
           {plan || propertyPlanType ? (
@@ -76,11 +78,9 @@ const BuildingPlanSection: React.FC<MasterPlanSectionProps> = ({
                         <span className="text-sm text-default-500">
                           {item.title}
                         </span>
-                       <div
-                        className="flex h-5 items-center space-x-4 text-md font-medium"
-                      >
-                        {item.data || "Not Available"}
-                      </div>
+                        <div className="flex h-5 items-center space-x-4 text-md font-medium">
+                          {item.data || "Not Available"}
+                        </div>
                       </div>
                     </div>
                   </CardBody>
@@ -94,9 +94,7 @@ const BuildingPlanSection: React.FC<MasterPlanSectionProps> = ({
           <PhotoProvider>
             {plan?.image ? (
               <div className="py-4 px-4">
-                <PhotoView
-                  src={`${apiUrl}/properties/plans/${plan.image}`}
-                >
+                <PhotoView src={`${apiUrl}/properties/plans/${plan.image}`}>
                   <Image
                     alt="Master Plan Image"
                     className="rounded-lg w-full"
