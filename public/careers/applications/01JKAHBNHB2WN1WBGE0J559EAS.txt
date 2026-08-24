@@ -1,0 +1,48 @@
+January 31, 2024
+
+Senior Web Developer: Giolo Evora
+
+Re:Abic Agent Website
+
+1. Account Details
+- Verify correct id.
+- Verify the correct recieving email.
+Status: Done (1.31.2025)
+Note: Morning
+
+Re: Abic Admin
+
+2. Admin Layout
+- Log in.
+- Dashboard
+- Articles
+- Careers
+- Certificates
+- Inquiries
+- items
+- Partners
+- Property
+- Schedules
+-Testimonials
+- User
+- Adding Property
+- Modals
+- Edit Properties
+- Property details table
+Status: Done (1.31.2025)
+Note: Afternoon
+
+3. Main Website URL
+- Chage the domain of main website
+Status: Pending
+Note: Need to configure in hostinger (I don't have access).
+
+Re: Side-task
+
+3. Cleaners
+Status: Done (1.31.2025)
+Note: Morning
+
+4. Cleaners
+Status: Done (1.31.2025)
+Note: Afternoon

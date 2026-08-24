@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Doe;Ella;;;
+FN:Ella Sarmiento
+ORG:DMCI Homes
+TITLE:Real Estate Agent
+TEL;TYPE=CELL:+639171234567
+EMAIL:ella.sarmiento@example.com
+URL:https://www.facebook.com/sonoragardenbyella
+END:VCARD

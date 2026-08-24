@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dmci-font-serif {
+	font-family: "Fraunces", ui-serif, Georgia, serif;
+}
+
+.dmci-font-poppins {
+	font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+.dmci-font-bree-serif {
+	font-family: Georgia, serif;
+}
+
+.dmci-font-raleway {
+	font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+.dmci-font-sans-body {
+	font-family: ui-sans-serif, system-ui, sans-serif;
+}

@@ -1,0 +1,49 @@
+February 25, 2025,
+
+Senior Web Developer: Giolo Evora
+
+Re: ABIC MAIN 
+
+1. Chatbot
+- When choosing properties, it could not retrieve the properties
+Status: Done (2.27.2025)
+Note: Morning
+
+2.Careers
+- When uploading resume enable image type to accept resume, not only PDF
+Status: Done (2.27.2025)
+Note: Morning
+
+3. Our Partner
+- Add data
+Status: Done (2.27.2025)
+Note: Morning
+
+4. Room Planner
+- Allow it to view on other tab after clicking
+Status: Done (2.27.2025)
+Note: Morning
+
+Re: ABIC Agent Sir Jayvee 
+
+5. Certificate 
+- Add title
+- Certificate of Appreciation
+- Promotion as Manager 
+- Top Manager for quarter 1 year 2024
+Status: Done (2.27.2025)
+Note: Morning
+
+Re: JuanTap User Side 
+
+6. Template
+- Fetch the whole code into user view Dynamic template preview
+Status: Pending
+Note: Afternoon
+
+Re: JuanTap Admin 
+
+7. Admin
+- User List page Chart Template 
+Status: Pending
+Note: Afternoon
