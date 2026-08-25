@@ -87,7 +87,7 @@ const SingleNews = () => {
         <img
           alt="News image"
           className="w-full h-[200px] md:h-[600px] object-cover object-center rounded-lg"
-          src={`https://infinitech-testing5.online/articles/${news.image}`}
+          src={`https://infinitech-api26.site/articles/${news.image}`}
           width={1400}
           height={600}
         />

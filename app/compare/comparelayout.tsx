@@ -59,7 +59,7 @@ interface CompareLayoutProps {
   initialData: Property[];
 }
 
-// FIX: this was previously hardcoded to "https://infinitech-testing5.online",
+// FIX: this was previously hardcoded to "https://infinitech-api26.site",
 // a different domain from the rest of the app, so images 404'd/never loaded.
 // Now it matches the same env-driven API base URL used everywhere else.
 const apiUrl =
