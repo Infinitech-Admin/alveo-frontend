@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -11,22 +12,15 @@ import {
 import {
   LuCircleCheck,
   LuHousePlus,
-  LuBuilding2,
-  LuHardHat,
-  LuBadgeCheck,
   LuBuilding,
-  LuBed,
   LuBedDouble,
-  LuLandmark,
   LuLandPlot,
 } from "react-icons/lu";
-import { MdInfo } from "react-icons/md";
 import Link from "next/link";
 import NoDataFound from "../fallback/nodatafound";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
 import { toSlug } from "@/utils/slug";
-import { filterMaxPrice } from "@/utils/priceformat";
 
 interface Property {
   id: string;
@@ -38,180 +32,434 @@ interface Property {
   property_description: string;
   property_size: string;
   property_level: string;
+
   property: {
     name: string;
     location: string;
   };
 }
+
 interface RecommendedCardProps {
   data: Property[];
 }
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://infinitech-api26.site";
 
-const RecommendedCard: React.FC<RecommendedCardProps> = ({ data }) => {
+// Fallback image
+const defaultImage = "/photo_2026-08-25_11-13-34.jpg";
+
+const RecommendedCard: React.FC<
+  RecommendedCardProps
+> = ({ data }) => {
   const pathname = usePathname();
-  const [compareList, setCompareList] = useState<string[]>(
-    JSON.parse(localStorage.getItem("compareList") || "[]"),
-  );
+
+  const [compareList, setCompareList] =
+    useState<string[]>([]);
+
+  // Track images that failed to load
+  const [failedImages, setFailedImages] =
+    useState<Set<string>>(new Set());
+
+  // --------------------------------------------------
+  // Load compare list
+  // --------------------------------------------------
+
+  useEffect(() => {
+    try {
+      const storedCompareList = JSON.parse(
+        localStorage.getItem("compareList") || "[]",
+      );
+
+      if (Array.isArray(storedCompareList)) {
+        setCompareList(storedCompareList);
+      }
+    } catch (error) {
+      console.error(
+        "Error loading compare list:",
+        error,
+      );
+
+      setCompareList([]);
+    }
+  }, []);
+
+  // --------------------------------------------------
+  // Listen for compare list changes
+  // --------------------------------------------------
 
   useEffect(() => {
     const handleStorageChange = () => {
-      setCompareList(JSON.parse(localStorage.getItem("compareList") || "[]"));
+      try {
+        const storedCompareList = JSON.parse(
+          localStorage.getItem("compareList") || "[]",
+        );
+
+        if (Array.isArray(storedCompareList)) {
+          setCompareList(storedCompareList);
+        }
+      } catch (error) {
+        console.error(
+          "Error reading compare list:",
+          error,
+        );
+      }
     };
 
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    window.addEventListener(
+      "storage",
+      handleStorageChange,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        handleStorageChange,
+      );
+    };
   }, []);
 
-  const handleCompare = (id: string) => {
+  // --------------------------------------------------
+  // Compare
+  // --------------------------------------------------
+
+  const handleCompare = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: string,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     let updatedCompareList = [...compareList];
 
     if (updatedCompareList.includes(id)) {
-      updatedCompareList = updatedCompareList.filter((item) => item !== id);
+      updatedCompareList =
+        updatedCompareList.filter(
+          (item) => item !== id,
+        );
     } else {
-      if (updatedCompareList.length < 3) {
-        updatedCompareList.push(id);
-      } else {
-        toast.error("You can only compare up to 3 items.");
+      if (updatedCompareList.length >= 3) {
+        toast.error(
+          "You can only compare up to 3 items.",
+        );
         return;
       }
+
+      updatedCompareList.push(id);
     }
 
-    localStorage.setItem("compareList", JSON.stringify(updatedCompareList));
+    localStorage.setItem(
+      "compareList",
+      JSON.stringify(updatedCompareList),
+    );
+
     setCompareList(updatedCompareList);
-    window.dispatchEvent(new Event("storage"));
+
+    window.dispatchEvent(
+      new Event("storage"),
+    );
   };
 
-  const getOrdinalSuffix = (num: string | number) => {
-    const n = parseInt(num as string);
-    const rem10 = n % 10;
-    const rem100 = n % 100;
+  // --------------------------------------------------
+  // Ordinal suffix
+  // --------------------------------------------------
+
+  const getOrdinalSuffix = (
+    num: string | number,
+  ) => {
+    const n = parseInt(String(num));
 
     if (isNaN(n)) return "";
 
-    if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+    const rem10 = n % 10;
+    const rem100 = n % 100;
+
+    if (rem100 >= 11 && rem100 <= 13) {
+      return `${n}th`;
+    }
 
     switch (rem10) {
       case 1:
         return `${n}st`;
+
       case 2:
         return `${n}nd`;
+
       case 3:
         return `${n}rd`;
+
       default:
         return `${n}th`;
     }
   };
 
-  // Filter out any records missing a valid nested `property` object BEFORE sorting/rendering.
-  // This is what prevents "Cannot read properties of null (reading 'name')" when the API
-  // returns a listing whose joined property is null/undefined.
+  // --------------------------------------------------
+  // Get image URL
+  // --------------------------------------------------
+
+  const getPropertyImage = (
+    item: Property,
+  ): string => {
+    if (!item?.images) {
+      return defaultImage;
+    }
+
+    try {
+      const images = JSON.parse(item.images);
+
+      if (
+        Array.isArray(images) &&
+        images.length > 0 &&
+        typeof images[0] === "string" &&
+        images[0].trim() !== ""
+      ) {
+        return `${apiUrl}/properties/images/${images[0]}`;
+      }
+
+      return defaultImage;
+    } catch (error) {
+      console.error(
+        "Error parsing images:",
+        error,
+      );
+
+      return defaultImage;
+    }
+  };
+
+  // --------------------------------------------------
+  // Handle image error
+  // --------------------------------------------------
+
+  const handleImageError = (
+    imageUrl: string,
+  ) => {
+    setFailedImages((previous) => {
+      if (previous.has(imageUrl)) {
+        return previous;
+      }
+
+      const next = new Set(previous);
+      next.add(imageUrl);
+
+      return next;
+    });
+  };
+
+  // --------------------------------------------------
+  // Filter valid data
+  // --------------------------------------------------
+
   const validData = (data ?? []).filter(
-    (item) => item && item.property && item.property.name,
+    (item) =>
+      item &&
+      item.property &&
+      item.property.name,
   );
+
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
 
   return (
     <>
       {validData.length > 0 ? (
         [...validData]
-          .sort((a, b) => a.property.name.localeCompare(b.property.name))
+          .sort((a, b) =>
+            a.property.name.localeCompare(
+              b.property.name,
+            ),
+          )
           .map((item) => {
             const name = item.property.name;
-            const description = item.property_description;
-            const location = item.property_location;
-            const status = item.property_type;
-            const price = item.property_price;
-
-            let imageUrl = "";
-            try {
-              const images: string[] = JSON.parse(item.images);
-              if (Array.isArray(images) && images.length > 0) {
-                imageUrl = `${apiUrl}/properties/images/${images[0]}`;
-              }
-            } catch (error) {
-              console.error("Error parsing images:", error);
-            }
-
-            const defaultImage =
-              "https://www.dmcihomes.com/uploads/media/executives-1563253639282.jpg";
+            const description =
+              item.property_description;
+            const location =
+              item.property_location;
+            const status =
+              item.property_type;
+            const price =
+              item.property_price;
 
             const propertyId = item.id;
-            const linkHref = `${toSlug(name)}/${toSlug(item.id)}/${toSlug(description || "")}`;
+
+            const imageUrl =
+              getPropertyImage(item);
+
+            const isFallback =
+              imageUrl === defaultImage ||
+              failedImages.has(imageUrl);
+
+            const displayedImage =
+              isFallback
+                ? defaultImage
+                : imageUrl;
+
+            const linkHref = `/${toSlug(
+              name,
+            )}/${toSlug(
+              item.id,
+            )}/${toSlug(
+              description || "",
+            )}`;
 
             return (
-              <Card key={propertyId}>
-                <Link href={linkHref}>
-                  <CardBody className="overflow-visible p-1  min-h-[356px]">
-                    <div className="overflow-hidden rounded-xl">
+              <Card
+                key={propertyId}
+                className="overflow-hidden"
+              >
+                <Link
+                  href={linkHref}
+                  className="block"
+                >
+                  <CardBody className="min-h-[356px] overflow-visible p-1">
+                    {/* =================================
+                        IMAGE
+                    ================================== */}
+
+                    <div
+                      className="relative h-52 w-full overflow-hidden rounded-xl"
+                    >
                       <Image
-                        alt={name || "Property Image"}
-                        className="object-cover rounded-xl w-full min-h-52 md:max-h-52"
-                        src={imageUrl || defaultImage}
+                        alt={
+                          name ||
+                          "Property Image"
+                        }
+                        src={displayedImage}
                         width={1000}
+                        height={400}
+                        removeWrapper
+                        className={`h-full w-full rounded-xl transition-transform duration-300 ${
+                          isFallback
+                            ? "object-contain p-10"
+                            : "object-cover hover:scale-105"
+                        }`}
+                        onError={() =>
+                          handleImageError(
+                            imageUrl,
+                          )
+                        }
                       />
                     </div>
 
+                    {/* =================================
+                        PROPERTY INFORMATION
+                    ================================== */}
+
                     <div className="flex flex-col items-start px-1">
-                      {/* Property Name */}
-                      <h4 className="font-bold text-sm line-clamp-1 mt-3 md:text-large uppercase">
-                        {name || "No Data Found"}
+                      <h4 className="mt-3 line-clamp-1 text-sm font-bold uppercase md:text-large">
+                        {name ||
+                          "No Data Found"}
                       </h4>
 
-                      {/* Property Location */}
-                      <p className="text-default-500 text-sm line-clamp-1">
-                        {location || "No Data Found"}
+                      <p className="line-clamp-1 text-sm text-default-500">
+                        {location ||
+                          "No Location Available"}
                       </p>
 
-                      {/* Responsive Chips */}
+                      {/* Chips */}
+
                       <div className="flex flex-wrap gap-2 py-2">
+                        {/* Floor */}
+
                         <Chip
-                          startContent={<LuBuilding />}
-                          className="text-[9px] md:text-tiny uppercase font-semibold px-2 py-0.5 rounded-md bg-[#79a0dd] text-[#0F1B2E]"
+                          startContent={
+                            <LuBuilding />
+                          }
+                          className="rounded-md bg-[#79a0dd] px-2 py-0.5 text-[9px] font-semibold uppercase text-[#0F1B2E] md:text-tiny"
                         >
-                          {getOrdinalSuffix(item.property_level)} Floor
+                          {item.property_level
+                            ? `${getOrdinalSuffix(
+                                item.property_level,
+                              )} Floor`
+                            : "Floor N/A"}
                         </Chip>
+
+                        {/* Size */}
+
                         <Chip
-                          startContent={<LuLandPlot />}
-                          className="text-[9px] md:text-tiny uppercase font-semibold px-2 py-0.5 rounded-md bg-[#79a0dd] text-[#0F1B2E]"
+                          startContent={
+                            <LuLandPlot />
+                          }
+                          className="rounded-md bg-[#79a0dd] px-2 py-0.5 text-[9px] font-semibold uppercase text-[#0F1B2E] md:text-tiny"
                         >
-                          {item.property_size} Sqm.
+                          {item.property_size ||
+                            "N/A"}{" "}
+                          Sqm.
                         </Chip>
+
+                        {/* Property Type */}
+
                         <Chip
-                          startContent={<LuBedDouble />}
-                          className="text-[9px] md:text-tiny uppercase font-semibold px-2 py-0.5 rounded-md bg-[#79a0dd] text-[#0F1B2E]"
+                          startContent={
+                            <LuBedDouble />
+                          }
+                          className="rounded-md bg-[#79a0dd] px-2 py-0.5 text-[9px] font-semibold uppercase text-[#0F1B2E] md:text-tiny"
                         >
-                          {status}
+                          {status ||
+                            "Type N/A"}
                         </Chip>
                       </div>
                     </div>
                   </CardBody>
                 </Link>
 
+                {/* =================================
+                    FOOTER
+                ================================== */}
+
                 <CardFooter>
-                  <div className="flex justify-between w-full items-center">
-                    <p className="text-md uppercase font-bold md:text-lg">
-                      &#8369; {price?.toLocaleString(undefined) || "0.00"}
+                  <div className="flex w-full items-center justify-between">
+                    <p className="text-md font-bold uppercase md:text-lg">
+                      ₱{" "}
+                      {price?.toLocaleString(
+                        undefined,
+                      ) || "0.00"}
                     </p>
 
-                    {pathname === "/properties" ? (
+                    {pathname ===
+                      "/properties" && (
                       <Tooltip content="Compare">
-                        <div
-                          className="py-2 px-2 bg-[#79a0dd] rounded-full cursor-pointer"
-                          onClick={() => handleCompare(propertyId)}
+                        <button
+                          type="button"
+                          aria-label={
+                            compareList.includes(
+                              propertyId,
+                            )
+                              ? "Remove from comparison"
+                              : "Add to comparison"
+                          }
+                          onClick={(event) =>
+                            handleCompare(
+                              event,
+                              propertyId,
+                            )
+                          }
+                          className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 ${
+                            compareList.includes(
+                              propertyId,
+                            )
+                              ? "bg-green-500 hover:bg-green-600"
+                              : "bg-[#79a0dd] hover:bg-[#668fcf]"
+                          }`}
                         >
-                          {compareList.includes(propertyId) ? (
+                          {compareList.includes(
+                            propertyId,
+                          ) ? (
                             <LuCircleCheck
                               className="text-[#0F1B2E]"
                               size={20}
                             />
                           ) : (
-                            <LuHousePlus className="text-[#0F1B2E]" size={20} />
+                            <LuHousePlus
+                              className="text-[#0F1B2E]"
+                              size={20}
+                            />
                           )}
-                        </div>
+                        </button>
                       </Tooltip>
-                    ) : null}
+                    )}
                   </div>
                 </CardFooter>
               </Card>

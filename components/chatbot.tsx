@@ -148,12 +148,12 @@ const Chatbot = () => {
 
         header: {
           title: "Alveo Land",
-          avatar: "/alveo-logo.png",
+          avatar: "/alveo-logo-white-small-768x396.png",
         },
 
         botBubble: {
           showAvatar: true,
-          avatar: "/alveo-logo.png",
+          avatar: "/alveo-logo-white-small-768x396.png",
         },
 
         chatButton: {

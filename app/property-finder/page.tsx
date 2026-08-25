@@ -108,10 +108,10 @@ export default async function PropertyFinder({
   return (
     <section className="container flex-grow px-2 flex flex-col gap-4 py-6 md:py-8">
       <div className="text-start">
-        <p className="text-lg">Search Results: {title}</p>
+        <p className="text-lg">Search Results: <span className="text-gray-700 underline underline-offset-2">{title}</span></p>
 
         {properties.length > 0 ? (
-          <div className="grid grid-cols-2 py-8 gap-1 md:grid-cols-4 md:gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 py-8 gap-1 lg:grid-cols-4 md:gap-2">
             <RecommendedCard data={properties} />
           </div>
         ) : (

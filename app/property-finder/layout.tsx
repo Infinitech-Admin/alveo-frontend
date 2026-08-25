@@ -11,7 +11,7 @@ export default function PropertyFinderLayout({
         }}>
         <h1 className="uppercase text-4xl font-bold text-white">property finder</h1>
       </div>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <section className="flex flex-col items-center justify-center gap-4 p-6 md:p-10">
         {children}
       </section>
     </>

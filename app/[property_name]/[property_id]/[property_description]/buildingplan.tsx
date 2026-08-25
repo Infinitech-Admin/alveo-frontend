@@ -16,6 +16,7 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 
 const apiUrl =
   process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
+  
 interface Property {
   area?: number;
   property_plan_cut?: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, MutableRefObject } from "react";
+import React, { MutableRefObject } from "react";
 import { Image } from "@heroui/react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
@@ -20,26 +20,37 @@ function ThumbnailPlugin(
     function removeActive() {
       slider.slides.forEach((slide) => slide.classList.remove("active"));
     }
+
     function addActive(idx: number) {
       slider.slides[idx]?.classList.add("active");
     }
+
     function addClickEvents() {
       slider.slides.forEach((slide, idx) => {
         slide.addEventListener("click", () => {
-          if (mainRef.current) mainRef.current.moveToIdx(idx);
+          if (mainRef.current) {
+            mainRef.current.moveToIdx(idx);
+          }
         });
       });
     }
 
     slider.on("created", () => {
       if (!mainRef.current) return;
+
       addActive(slider.track.details.rel);
       addClickEvents();
+
       mainRef.current.on("animationStarted", (main) => {
         removeActive();
+
         const next = main.animator.targetIdx || 0;
+
         addActive(main.track.absToRel(next));
-        slider.moveToIdx(Math.min(slider.track.details.maxIdx, next));
+
+        slider.moveToIdx(
+          Math.min(slider.track.details.maxIdx, next),
+        );
       });
     });
   };
@@ -56,15 +67,21 @@ interface ListingsMediaProps {
 const apiUrl =
   process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
 
+// Fallback image
+const defaultImage = "/photo_2026-08-25_11-13-34.jpg";
+
 const PropertyImage: React.FC<ListingsMediaProps> = ({ data }) => {
-  // Main slider for small devices
+  // Main slider
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     initial: 0,
     loop: true,
-    slides: { perView: 1, spacing: 5 },
+    slides: {
+      perView: 1,
+      spacing: 5,
+    },
   });
 
-  // Thumbnail slider for large devices
+  // Thumbnail slider
   const [thumbnailRef] = useKeenSlider<HTMLDivElement>(
     {
       initial: 0,
@@ -76,7 +93,6 @@ const PropertyImage: React.FC<ListingsMediaProps> = ({ data }) => {
     [ThumbnailPlugin(instanceRef)],
   );
 
-  // Handle Prev and Next with safety checks
   const handlePrev = () => {
     instanceRef.current?.prev();
   };
@@ -85,111 +101,196 @@ const PropertyImage: React.FC<ListingsMediaProps> = ({ data }) => {
     instanceRef.current?.next();
   };
 
-  // Default fallback image
-  const defaultImage =
-    "https://www.dmcihomes.com/uploads/media/executives-1563253639282.jpg";
+  // Track failed images
+  const [failedImages, setFailedImages] = React.useState<Set<string>>(
+    new Set(),
+  );
 
+  const getSrc = (url: string) => {
+    return failedImages.has(url) ? defaultImage : url;
+  };
+
+  const handleImageError = (url: string) => () => {
+    setFailedImages((prev) => {
+      if (prev.has(url)) return prev;
+
+      const next = new Set(prev);
+      next.add(url);
+
+      return next;
+    });
+  };
+
+  // Parse images
   let parsedImages: string[] = [];
 
-  // Parse images safely
   try {
     parsedImages = JSON.parse(data.images || "[]");
   } catch (error) {
     console.error("Error parsing images:", error);
   }
 
-  // Main image for large screens
   const mainImage = parsedImages.length
     ? `${apiUrl}/properties/images/${parsedImages[0]}`
     : defaultImage;
 
   return (
     <PhotoProvider>
-      <div>
-        {/* For Large Screens */}
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-4 gap-2">
-          {/* Main Image Section */}
-          <div className="col-span-1 md:col-span-2">
-            <PhotoView data-title="Main Image" src={mainImage}>
-              <Image
-                alt="Main Image"
-                className="w-full rounded-lg object-cover"
-                height={510}
-                width={1000}
-                src={mainImage}
-              />
+      <div className="w-full">
+        {/* =========================
+            LARGE SCREEN
+        ========================== */}
+        <div className="hidden md:grid md:grid-cols-4 gap-2 w-full">
+          {/* Main Image */}
+          <div
+            className="md:col-span-2 h-[510px] rounded-lg overflow-hidden"
+          >
+            <PhotoView
+              data-title="Main Image"
+              src={getSrc(mainImage)}
+            >
+              <div className="w-full h-full cursor-pointer">
+                <Image
+                  alt="Main Image"
+                  className={`w-full h-full object-cover rounded-lg ${
+                    failedImages.has(mainImage)
+                      ? "object-contain p-12"
+                      : "object-cover"
+                  }`}
+                  src={getSrc(mainImage)}
+                  width={1000}
+                  height={510}
+                  removeWrapper
+                  onError={handleImageError(mainImage)}
+                />
+              </div>
             </PhotoView>
           </div>
 
-          {/* Thumbnail Section */}
-          <div className="col-span-1 md:col-span-2 grid grid-cols-2 gap-2">
+          {/* Thumbnails */}
+          <div className="md:col-span-2 grid grid-cols-2 gap-2">
             {Array.from({ length: 4 }).map((_, index) => {
-              const image = parsedImages[index + 1]; // Skip the first image
+              const image = parsedImages[index + 1];
+
               const imageUrl = image
                 ? `${apiUrl}/properties/images/${image}`
                 : defaultImage;
 
+              const isFallback =
+                !image || failedImages.has(imageUrl);
+
               return (
-                <PhotoView
+                <div
                   key={index}
-                  data-title={`Thumbnail ${index + 1}`}
-                  src={imageUrl}
+                  className="h-[249px] rounded-lg overflow-hidden"
                 >
-                  <Image
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full rounded-lg object-cover"
-                    height={250}
-                    width={1000}
-                    src={imageUrl}
-                  />
-                </PhotoView>
+                  <PhotoView
+                    data-title={`Thumbnail ${index + 1}`}
+                    src={getSrc(imageUrl)}
+                  >
+                    <div className="w-full h-full cursor-pointer">
+                      <Image
+                        alt={`Thumbnail ${index + 1}`}
+                        className={`w-full h-full rounded-lg ${
+                          isFallback
+                            ? "object-contain p-8"
+                            : "object-cover"
+                        }`}
+                        src={getSrc(imageUrl)}
+                        width={1000}
+                        height={250}
+                        removeWrapper
+                        onError={handleImageError(imageUrl)}
+                      />
+                    </div>
+                  </PhotoView>
+                </div>
               );
             })}
           </div>
         </div>
 
-        {/* For Small Screens */}
-        <div className="md:hidden">
-          {/* Main Slider */}
+        {/* =========================
+            SMALL SCREEN
+        ========================== */}
+        <div className="md:hidden w-full">
           <div className="relative">
-            <div ref={sliderRef} className="keen-slider">
+            <div
+              ref={sliderRef}
+              className="keen-slider rounded-lg overflow-hidden"
+            >
               {parsedImages.length > 0 ? (
-                parsedImages.map((image, index) => (
-                  <div key={index} className="keen-slider__slide">
-                    <PhotoView
-                      data-title={`Slide ${index + 1}`}
-                      src={`${apiUrl}/properties/images/${image}`}
+                parsedImages.map((image, index) => {
+                  const slideUrl = `${apiUrl}/properties/images/${image}`;
+
+                  const isFallback =
+                    failedImages.has(slideUrl);
+
+                  return (
+                    <div
+                      key={index}
+                      className="keen-slider__slide h-[300px] rounded-lg overflow-hidden"
                     >
-                      <Image
-                        alt={`Slide ${index + 1}`}
-                        className="w-full h-auto object-cover rounded-lg"
-                        src={`${apiUrl}/properties/images/${image}`}
-                        width={1000}
-                        height={300}
-                      />
-                    </PhotoView>
-                  </div>
-                ))
+                      <PhotoView
+                        data-title={`Slide ${index + 1}`}
+                        src={getSrc(slideUrl)}
+                      >
+                        <div className="w-full h-full cursor-pointer">
+                          <Image
+                            alt={`Slide ${index + 1}`}
+                            className={`w-full h-full rounded-lg ${
+                              isFallback
+                                ? "object-contain p-10"
+                                : "object-cover"
+                            }`}
+                            src={getSrc(slideUrl)}
+                            width={1000}
+                            height={300}
+                            removeWrapper
+                            onError={handleImageError(slideUrl)}
+                          />
+                        </div>
+                      </PhotoView>
+                    </div>
+                  );
+                })
               ) : (
-                <p className="text-center">No images available</p>
+                <div
+                  className="keen-slider__slide h-[300px] rounded-lg overflow-hidden flex items-center justify-center">
+                  <Image
+                    alt="No images available"
+                    className="w-full h-full object-contain p-10"
+                    src={defaultImage}
+                    width={1000}
+                    height={300}
+                    removeWrapper
+                  />
+                </div>
               )}
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-4 z-10">
-              <button
-                className="bg-blue-600 opacity-50 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition hover:opacity-100"
-                onClick={handlePrev}
-              >
-                &#8249; {/* Left arrow */}
-              </button>
-              <button
-                className="bg-blue-600 opacity-50 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition hover:opacity-100"
-                onClick={handleNext}
-              >
-                &#8250; {/* Right arrow */}
-              </button>
-            </div>
+            {/* Navigation */}
+            {parsedImages.length > 1 && (
+              <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-3 z-10 pointer-events-none">
+                <button
+                  type="button"
+                  aria-label="Previous image"
+                  className="pointer-events-auto flex items-center justify-center w-10 h-10 rounded-full bg-[#11398D]/70 text-white text-2xl hover:bg-[#11398D] transition-all duration-200"
+                  onClick={handlePrev}
+                >
+                  &#8249;
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Next image"
+                  className="pointer-events-auto flex items-center justify-center w-10 h-10 rounded-full bg-[#11398D]/70 text-white text-2xl hover:bg-[#11398D] transition-all duration-200"
+                  onClick={handleNext}
+                >
+                  &#8250;
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

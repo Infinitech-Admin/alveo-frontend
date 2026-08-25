@@ -69,7 +69,7 @@ export default async function SinglePropertyPage({
         </div>
 
         <div className="col-span-3 xl:col-span-1 min-h-screen">
-          <div className="sticky top-20">
+          <div className="sticky top-10">
             <InquiryContainer data={properties} />
           </div>
         </div>

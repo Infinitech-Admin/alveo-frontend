@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
   },
   manifest: "/manifest.json",   // ✅ Added for PWA
-  themeColor: "#004aad",        // ✅ DMCI brand color
 };
 
 export const viewport: Viewport = {

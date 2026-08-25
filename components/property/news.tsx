@@ -1,4 +1,6 @@
 "use client";
+
+import React, { useState } from "react";
 import { Card, CardBody, Image, Link } from "@heroui/react";
 
 interface NewsBlogsData {
@@ -14,56 +16,116 @@ interface NewsBlogsDataProps {
 }
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://infinitech-api26.site";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://infinitech-api26.site";
 
-const NewsBlogs: React.FC<NewsBlogsDataProps> = ({ articles }) => {
-  const defaultImage =
-    "https://www.dmcihomes.com/uploads/media/executives-1563253639282.jpg";
+// Fallback image
+const defaultImage ="/photo_2026-08-25_11-13-34.jpg";
 
-  // Sort articles by date in descending order (latest first)
-  const sortedArticles = articles.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+const NewsBlogs: React.FC<NewsBlogsDataProps> = ({
+  articles,
+}) => {
+  // Track images that failed to load
+  const [failedImages, setFailedImages] =
+    useState<Set<string>>(new Set());
+
+  const handleImageError = (
+    imageUrl: string,
+  ) => {
+    setFailedImages((previous) => {
+      if (previous.has(imageUrl)) {
+        return previous;
+      }
+
+      const next = new Set(previous);
+      next.add(imageUrl);
+
+      return next;
+    });
+  };
+
+  const sortedArticles = [...(articles ?? [])].sort(
+    (a, b) =>
+      new Date(b.date).getTime() -
+      new Date(a.date).getTime(),
   );
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-5 md:gap-2 py-4">
-      {sortedArticles.map((newsItem, index) => {
-        // Format the date to a long format (e.g., "January 8, 2025")
-        const formattedDate = new Date(newsItem.date).toLocaleDateString(
-          "en-US",
-          {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          },
-        );
+    <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-3 md:gap-2 lg:grid-cols-5">
+      {sortedArticles.map((newsItem) => {
+
+        const formattedDate = new Date(
+          newsItem.date,
+        ).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const imageUrl = newsItem.image
+          ? `${apiUrl}/articles/${newsItem.image}`
+          : defaultImage;
+
+        const isFallback =
+          !newsItem.image ||
+          failedImages.has(imageUrl);
+
+        const displayedImage = isFallback
+          ? defaultImage
+          : imageUrl;
 
         return (
-          <Link key={index} href={`view/articles?id=${newsItem.id}`}>
-            <Card className="flex flex-col h-full">
-              <CardBody className="overflow-visible py-1 px-1 flex flex-col h-full">
-                <div className="overflow-hidden rounded-lg mb-4">
+          <Link
+            key={newsItem.id}
+            href={`/view/articles?id=${newsItem.id}`}
+            className="h-full"
+          >
+            <Card className="flex h-full flex-col overflow-hidden">
+              <CardBody className="flex h-full flex-col overflow-visible p-1">
+                <div
+                  className="relative h-48 w-full overflow-hidden rounded-xl"
+                >
                   <Image
-                    isZoomed
-                    alt="Card background"
-                    className="object-cover rounded-xl w-full min-h-32 md:h-48 aspect-w-16"
-                    src={
-                      newsItem.image
-                        ? `${apiUrl}/articles/${newsItem.image}`
-                        : defaultImage
+                    isZoomed={!isFallback}
+                    alt={
+                      newsItem.headline ||
+                      "Article Image"
                     }
+                    src={displayedImage}
                     width={1000}
+                    height={400}
+                    removeWrapper
+                    className={`h-full w-full rounded-xl transition-transform duration-300 ${
+                      isFallback
+                        ? "object-contain p-10"
+                        : "object-cover"
+                    }`}
+                    onError={() =>
+                      handleImageError(
+                        imageUrl,
+                      )
+                    }
                   />
                 </div>
 
-                <div className="flex-1 flex flex-col justify-between py-4 px-2">
-                  <h4 className="font-bold text-sm md:text-lg uppercase line-clamp-1">
-                    {newsItem.headline}
+                <div className="flex flex-1 flex-col justify-between px-2 py-4">
+                  {/* Headline */}
+
+                  <h4 className="line-clamp-2 text-sm font-bold uppercase md:text-lg">
+                    {newsItem.headline ||
+                      "No Headline Available"}
                   </h4>
-                  <small className="text-default-500 line-clamp-3 md:line-clamp-3 leading-4">
-                    {newsItem.content}
+
+                  {/* Content */}
+
+                  <small className="mt-2 line-clamp-3 leading-4 text-default-500">
+                    {newsItem.content ||
+                      "No content available."}
                   </small>
-                  <p className="text-tiny uppercase font-bold pt-2">
+
+                  {/* Date */}
+
+                  <p className="pt-3 text-tiny font-bold uppercase">
                     {formattedDate}
                   </p>
                 </div>

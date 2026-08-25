@@ -42,7 +42,7 @@ export const DmciWelcomeEmail = ({ sender_email }: any) => (
                 <Img
                   alt="ALVEO Land Logo"
                   height="80"
-                  src={`${apiUrl}/logo/dmci-logo-only.png`}
+                  src={`${apiUrl}/alveo-logo-white-small-768x396.png`}
                   style={{ display: "block", margin: "0 auto" }}
                 />
               </td>
@@ -78,14 +78,14 @@ export const DmciWelcomeEmail = ({ sender_email }: any) => (
             Stay tuned for our upcoming newsletters, and feel free to reach out
             if you have any questions or specific property preferences.
           </Text>
-          <Button href="https://dmci-agent-website.vercel.app/" style={button}>
+          <Button href="https://staging-alveo.vercel.app/" style={button}>
             Visit Our Website
           </Button>
           <Hr style={hr} />
           <Text style={paragraphs}>
             If you ever wish to unsubscribe, you can do so by clicking{" "}
             <Link
-              href={`https://dmci-agent-website.vercel.app/subscription?email=${sender_email}`}
+              href={`https://staging-alveo.vercel.app/subscription?email=${sender_email}`}
               style={anchor}
             >
               here
@@ -105,7 +105,7 @@ export const DmciWelcomeEmail = ({ sender_email }: any) => (
             LandLine: 02-8646-6136 | Mobile: (+63) 917 548 09994
             <br />
             Email: elladmcihomes.ph@gmail.com | Website:{" "}
-            <Link href="https://dmci-agent.vercel.app/" style={anchor}>
+            <Link href="https://staging-alveo.vercel.app/" style={anchor}>
               dmci-agent.vercel.app
             </Link>
             <br />

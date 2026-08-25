@@ -7,7 +7,7 @@ const menuItems = [
     key: "apk-download",
     label: "Download App",
     icon: <LuDownload className="text-md text-white" />,
-    link: "dmci-application.apk",
+    link: "alveo-application.apk",
     download: true,
   },
 ];

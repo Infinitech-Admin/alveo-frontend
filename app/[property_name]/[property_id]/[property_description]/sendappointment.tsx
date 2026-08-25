@@ -91,16 +91,16 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div className="w-full p-6">
-      <div className="flex items-center gap-2">
-        <div className="bg-[#0F1B2E] p-2 rounded-full text-[#192D4D]">
-          <LuCalendarRange size={48} />
+    <div className="w-full p-4 sm:p-6">
+      <div className="flex items-start sm:items-center gap-2">
+        <div className="bg-[#0F1B2E] p-2 rounded-full text-[#79a0dd] shrink-0">
+          <LuCalendarRange size={36} className="sm:w-12 sm:h-12" />
         </div>
         <div>
-          <h1 className="text-2xl uppercase font-semibold">
+          <h1 className="text-lg sm:text-2xl uppercase font-semibold leading-tight">
             Book an On-Site Viewing
           </h1>
-          <p className="text-sm text-default-500 font-normal">
+          <p className="text-xs sm:text-sm text-default-500 font-normal">
             Please fill out the form below to schedule your on-site visit. Our
             team will get back to you as soon as possible.
           </p>
@@ -125,26 +125,30 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
         onSubmit={handleAppointmentSubmit}
       >
         {({ isSubmitting, setFieldValue }) => (
-          <Form className="flex flex-col gap-4">
-            <Field
-              as={Input}
-              name="name"
-              label="Full Name"
-              placeholder="e.g. Juan Pedro"
-            />
-            <ErrorMessage
-              className="text-red-500 text-sm"
-              component="div"
-              name="name"
-            />
+          <Form className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col w-full">
+              <Field
+                as={Input}
+                name="name"
+                label="Full Name"
+                placeholder="e.g. Juan Pedro"
+                className="w-full"
+              />
+              <ErrorMessage
+                className="text-red-500 text-sm"
+                component="div"
+                name="name"
+              />
+            </div>
 
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex flex-col w-full">
                 <Field
                   as={Input}
                   name="email"
                   label="Email"
                   placeholder="e.g. email@gmail.com"
+                  className="w-full"
                 />
                 <ErrorMessage
                   className="text-red-500 text-sm"
@@ -158,6 +162,7 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
                   name="phone"
                   label="Phone Number"
                   placeholder="e.g. 09924401097"
+                  className="w-full"
                 />
                 <ErrorMessage
                   className="text-red-500 text-sm"
@@ -167,7 +172,7 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex flex-col w-full">
                 <Field
                   as={Input}
@@ -175,6 +180,7 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
                   label="Date"
                   type="date"
                   min={today}
+                  className="w-full"
                 />
                 <ErrorMessage
                   className="text-red-500 text-sm"
@@ -183,7 +189,13 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
                 />
               </div>
               <div className="flex flex-col w-full">
-                <Field as={Input} name="time" label="Time" type="time" />
+                <Field
+                  as={Input}
+                  name="time"
+                  label="Time"
+                  type="time"
+                  className="w-full"
+                />
                 <ErrorMessage
                   className="text-red-500 text-sm"
                   component="div"
@@ -192,12 +204,13 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
               </div>
             </div>
 
-            <div>
+            <div className="w-full">
               <Field name="type">
                 {({ field, form }: any) => (
                   <Select
                     label="Appointment For"
                     selectedKeys={[field.value]}
+                    className="w-full"
                     onSelectionChange={(selected) => {
                       const selectedValue = Array.from(selected)[0]; // Formik expects string
                       form.setFieldValue("type", selectedValue);
@@ -218,12 +231,13 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
               />
             </div>
 
-            <div>
+            <div className="w-full">
               <Field
                 as={Textarea}
                 name="message"
                 label="Your Message to the Agent"
                 placeholder="Leave us a message..."
+                className="w-full"
               />
               <ErrorMessage
                 className="text-red-500 text-sm"
@@ -234,7 +248,7 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
 
             <Field name="agreement">
               {({ form }: any) => (
-                <label className="flex items-center space-x-2">
+                <label className="flex items-start sm:items-center gap-2">
                   <Checkbox
                     id="agreement"
                     isSelected={form.values.agreement}
@@ -242,7 +256,7 @@ const SendAppointment: React.FC<InquiryFormProps> = ({ inquiry }) => {
                       form.setFieldValue("agreement", checked);
                     }}
                   />
-                  <span>
+                  <span className="text-sm sm:text-base">
                     I agree to the{" "}
                     <button
                       type="button"

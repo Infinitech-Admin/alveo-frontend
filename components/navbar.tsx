@@ -90,11 +90,11 @@ export const Navbar = () => {
   const handleInstallApp = async () => {
     if (!deferredPrompt) return;
 
-    deferredPrompt.prompt();
+    await deferredPrompt.prompt();
 
     const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === "accepted") {
+    if (outcome === "accepted" || outcome === "dismissed") {
       setShowInstallButton(false);
     }
 

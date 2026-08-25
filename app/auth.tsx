@@ -9,6 +9,5 @@ export const getAuthHeaders = (): HeadersInit => {
 
   return {
     "User-ID": `${id}`,
-    "Content-Type": "application/json",
   };
 };

@@ -43,7 +43,7 @@ export const InquiryNotificationEmail = ({
         <Img
           alt="ALVEO Land Logo"
           height="170"
-          src={`${apiUrl}/logo/dmci-logo-only.png`}
+          src={`${apiUrl}/alveo-logo-white-small-768x396.png`}
           style={logo}
         />
         <Heading style={h1}>New Inquiry Notification</Heading>

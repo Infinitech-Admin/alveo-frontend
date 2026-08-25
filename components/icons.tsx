@@ -31,7 +31,7 @@ export const BrandLogo: React.FC<IconSvgProps> = ({}) => {
       alt="ALVEO Logo"
       className="bg-white p-0"
       height={20}
-      src="/dmci-logo.png"
+      src="/alveo-logo-white-small-768x396.png"
       width={20}
     />
   );
